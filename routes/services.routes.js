@@ -1,5 +1,4 @@
 const router = require("express").Router();
-
 const Service = require('./../models/Service.model')
 
 
@@ -36,6 +35,31 @@ router.post("/addService", (req, res) => {
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
+
+router.put("/edit-service/:service_id", (req, res) => {
+
+    const { service_id: id } = req.params
+    const { name, description, image, totalHours } = req.body
+
+    Service
+        .findByIdAndUpdate(id, { name, description, image, totalHours }, { new: true })
+        .then(response => res.json(response))
+        .catch(error => { next(error) })
+})
+
+router.delete('/delete-service/:service_id', (req, res) => {
+
+    const { service_id: id } = req.params
+
+    Service
+        .findByIdAndDelete(id)
+        .then(response => res.json(response))
+        .catch(error => { next(error) })
+
+})
+
+
+
 
 
 module.exports = router

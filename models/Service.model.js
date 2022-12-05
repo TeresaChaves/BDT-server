@@ -17,21 +17,25 @@ const serviceSchema = new Schema(
         image: {
             type: String
         },
-        offered: {
-            type: Schema.ObjectId,
-            ref: 'User'
-        },
-        serviceTotalHours: {
+        // owner: {
+        //     type: Schema.ObjectId,
+        //     ref: 'User'
+        // },
+        totalHours: {
             type: Number,
         },
-        serviceDate: {
+        date: {
             type: Date
         },
-        costumer: {
-            type: Schema.ObjectId,
-            ref: 'User'
-        }
+        status: {
+            type: String,
+            enum: ['pending', 'complete'],
+        },
 
+        // costumer: {
+        //     type: Schema.ObjectId,
+        //     ref: 'User'
+        // }
     }
 );
 
