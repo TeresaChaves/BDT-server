@@ -7,8 +7,8 @@ Server table
 |/api/services/hireService/:service_id|POST|hiring the service of another user|
 |/api/services/payservice/:service_id|POST|pay the service with the hours in your bank
 |/api/services/addService|POST|create new service in the timebank|
-|/api/services/editService|PUT|edit service thath you give to the bank|
-|/api/services/deleteService|DELETE|delete service thath you give to the bank|
+|/api/services/editService|POST|edit service thath you give to the bank|
+|/api/services/deleteService|POST|delete service thath you give to the bank|
 |/api/auth/signup|POST|register new user|
 |/api/auth/login|POST|login to the user's session|
 |/api/auth/verify|GET|verify user and session|
