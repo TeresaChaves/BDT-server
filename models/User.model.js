@@ -16,18 +16,24 @@ const userSchema = new Schema(
     username: {
       type: String,
     },
-
     avatar: {
       type: String,
     },
-    maxHoursToOffer: {
+    maxHours: {
       type: Number,
     },
-    bankAccountTime: {
-      type: Number,
-    }
-
-
+    role: {
+      type: String,
+      enum: ['USER', 'ADMIN'],
+      default: 'USER'
+    },
+    bankAccountTime: [{
+      minutes: Number,
+      //bonus para el histórico y el desglose de qué ha solicitado// service: {
+      //   type: Schema.Types.ObjectId,
+      //   ref: 'Service'
+      // },
+    }]
   },
   {
     timestamps: true
