@@ -2,16 +2,11 @@ const router = require("express").Router();
 const Service = require('./../models/Service.model')
 
 
-router.get("/", (req, res, next) => {
-    res.json("All good in here");
-});
-
-
 router.get("/allServices", (req, res) => {
 
     Service
         .find()
-        // .select({ title: 1, imageUrl: 1 })
+        .select({ name: 1, image: 1 })
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
