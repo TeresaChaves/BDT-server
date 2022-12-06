@@ -30,8 +30,10 @@ router.get("/serviceDetails/:service_id", (req, res, next) => {
 
 router.post("/addService", (req, res) => {
 
+    const { name, description, image, totalHours } = req.body
+
     Service
-        .create(req.body)
+        .create({ name, description, image, totalHours })
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
