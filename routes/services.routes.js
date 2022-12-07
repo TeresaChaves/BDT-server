@@ -2,16 +2,11 @@ const router = require("express").Router();
 const Service = require('./../models/Service.model')
 
 
-router.get("/", (req, res, next) => {
-    res.json("All good in here");
-});
-
-
 router.get("/allServices", (req, res) => {
 
     Service
         .find()
-        // .select({ title: 1, imageUrl: 1 })
+        .select({ name: 1, image: 1 })
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
@@ -28,14 +23,12 @@ router.get("/serviceDetails/:service_id", (req, res, next) => {
 })
 
 
-router.post("/addService", (req, res) => {
-
-    const { name, description, image, totalHours } = req.body
-
+router.post("/addService", (req, res, next) => {
+    const { name, description, image, totalhours, date, status } = req.body
     Service
-        .create({ name, description, image, totalHours })
+        .create({ name, description, image, totalhours, date, status })
         .then(response => res.json(response))
-        .catch(err => res.status(500).json(err))
+        .catch(err => next(err))
 })
 
 router.put("/edit-service/:service_id", (req, res) => {

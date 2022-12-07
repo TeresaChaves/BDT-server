@@ -13,7 +13,6 @@ router.post('/signup', (req, res, next) => {
 
     const { email, password, username, avatar, maxHours } = req.body
 
-    console.log(maxHours, typeof maxHours)
 
     if (password.length < 2) {
         res.status(400).json({ message: 'Su contraseña debe tener al menos 3 caracteres' })
@@ -24,7 +23,7 @@ router.post('/signup', (req, res, next) => {
         .then((foundUser) => {
 
             if (foundUser) {
-                res.status(400).json({ message: "El usuario ya existe." })
+                res.status(400).json({ errorMessages: ["El usuario ya existe."] })
                 return
             }
 
@@ -39,10 +38,7 @@ router.post('/signup', (req, res, next) => {
 
             res.status(201).json({ user })
         })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({ message: "Error interno del servidor" })
-        })
+        .catch(err => next(err))
 })
 
 
@@ -84,10 +80,7 @@ router.post('/login', (req, res, next) => {
             }
 
         })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({ message: "Error interno del servidor" })
-        });
+        .catch(err => next(err));
 });
 
 router.get('/verify', isAuthenticated, (req, res) => {
