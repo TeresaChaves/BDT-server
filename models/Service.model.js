@@ -4,7 +4,7 @@ const serviceSchema = new Schema(
     {
         name: {
             type: String,
-            required: [true, 'Es necesario el nombre.'],
+            required: [true, 'Es necesario darle un nombre al servicio.'],
             lowercase: true,
             trim: true
         },
@@ -21,10 +21,10 @@ const serviceSchema = new Schema(
         //     type: Schema.ObjectId,
         //     ref: 'User'
         // },
-        totalHours: {
+        serviceDuration: {
             type: Number,
         },
-        date: {
+        serviceDate: {
             type: Date
         },
         status: {

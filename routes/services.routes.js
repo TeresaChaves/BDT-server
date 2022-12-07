@@ -23,12 +23,12 @@ router.get("/serviceDetails/:service_id", (req, res, next) => {
 })
 
 
-router.post("/addService", (req, res) => {
-
+router.post("/addService", (req, res, next) => {
+    const { name, description, image, totalhours, date, status } = req.body
     Service
-        .create(req.body)
+        .create({ name, description, image, totalhours, date, status })
         .then(response => res.json(response))
-        .catch(err => res.status(500).json(err))
+        .catch(err => next(err))
 })
 
 router.put("/edit-service/:service_id", (req, res) => {

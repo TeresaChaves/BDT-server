@@ -21,6 +21,7 @@ const userSchema = new Schema(
     },
     maxHours: {
       type: Number,
+      required: [true, 'Introduzca el nº de horas semanales que dedicará al banco de tiempo']
     },
     role: {
       type: String,
