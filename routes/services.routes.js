@@ -23,31 +23,39 @@ router.get("/serviceDetails/:service_id", (req, res, next) => {
 
 
 router.post("/addService", isAuthenticated, (req, res, next) => {
-    const { name, description, image, totalhours, date, status } = req.body
+    const { name, description, image, date, status } = req.body
     Service
-        .create({ name, description, image, totalhours, date, status, owner: req.payload._id })
+        .create({ name, description, image, date, status, owner: req.payload._id })
         .then(response => res.json(response))
+
+
         .catch(err => next(err))
 })
 
-router.put("/edit-service/:service_id", (req, res) => {
+router.put("/edit-service/:service_id", (req, res, next) => {
 
     const { service_id: id } = req.params
-    const { name, description, image, totalHours } = req.body
+    const { name, description, image } = req.body
 
     Service
-        .findByIdAndUpdate(id, { name, description, image, totalHours }, { new: true })
+        .findByIdAndUpdate(id, { name, description, image }, { new: true })
         .then(response => res.json(response))
         .catch(error => { next(error) })
 })
 
-router.delete('/delete-service/:service_id', (req, res) => {
+router.delete('/delete-service/:service_id', (req, res, next) => {
 
     const { service_id: id } = req.params
 
     Service
         .findByIdAndDelete(id)
         .then(response => res.json(response))
+        .then(service => {
+            res.redirect("./servicios", {
+                service,
+                isADMIN: req.session.currentUser.role === 'ADMIN'
+            })
+        })
         .catch(error => { next(error) })
 
 })

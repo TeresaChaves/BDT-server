@@ -11,7 +11,7 @@ const { isAuthenticated } = require('./../middleware/jwt.middleware')
 
 router.post('/signup', (req, res, next) => {
 
-    const { email, password, username, avatar, maxHours } = req.body
+    const { email, password, username, avatar } = req.body
 
 
     if (password.length < 2) {
@@ -30,11 +30,11 @@ router.post('/signup', (req, res, next) => {
             const salt = bcrypt.genSaltSync(saltRounds)
             const hashedPassword = bcrypt.hashSync(password, salt)
 
-            return User.create({ email, password: hashedPassword, username, avatar, maxHours })
+            return User.create({ email, password: hashedPassword, username, avatar })
         })
         .then((createdUser) => {
-            const { email, hashedPassword, username, avatar, maxHours } = createdUser
-            const user = { email, hashedPassword, username, avatar, maxHours }
+            const { email, hashedPassword, username, avatar } = createdUser
+            const user = { email, hashedPassword, username, avatar }
 
             res.status(201).json({ user })
         })
@@ -63,9 +63,9 @@ router.post('/login', (req, res, next) => {
 
             if (bcrypt.compareSync(password, foundUser.password)) {
 
-                const { _id, email, username, avatar, maxHours } = foundUser;
+                const { _id, email, username, avatar } = foundUser;
 
-                const payload = { _id, email, username, avatar, maxHours }
+                const payload = { _id, email, username, avatar }
 
                 const authToken = jwt.sign(
                     payload,
