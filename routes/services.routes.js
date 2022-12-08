@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Service = require('./../models/Service.model')
 
-
 router.get("/allServices", (req, res) => {
 
     Service
@@ -10,7 +9,6 @@ router.get("/allServices", (req, res) => {
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
-
 
 router.get("/serviceDetails/:service_id", (req, res, next) => {
 
@@ -21,7 +19,6 @@ router.get("/serviceDetails/:service_id", (req, res, next) => {
         .then(response => res.json(response))
         .catch(err => next(err))
 })
-
 
 router.post("/addService", (req, res, next) => {
     const { name, description, image, totalhours, date, status } = req.body
@@ -52,9 +49,6 @@ router.delete('/delete-service/:service_id', (req, res) => {
         .catch(error => { next(error) })
 
 })
-
-
-
 
 
 module.exports = router
