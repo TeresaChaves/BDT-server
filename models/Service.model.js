@@ -17,10 +17,10 @@ const serviceSchema = new Schema(
         image: {
             type: String
         },
-        // owner: {
-        //     type: Schema.ObjectId,
-        //     ref: 'User'
-        // },
+        owner: {
+            type: Schema.ObjectId,
+            ref: 'User'
+        },
         serviceDuration: {
             type: Number,
         },
@@ -32,10 +32,10 @@ const serviceSchema = new Schema(
             enum: ['pending', 'complete'],
         },
 
-        // costumer: {
-        //     type: Schema.ObjectId,
-        //     ref: 'User'
-        // }
+        costumer: {
+            type: Schema.ObjectId,
+            ref: 'User'
+        }
     }
 );
 
