@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Service = require('./../models/Service.model')
 
 
@@ -6,7 +7,7 @@ router.get("/allServices", (req, res) => {
 
     Service
         .find()
-        .select({ name: 1, image: 1 })
+        .select({ name: 1, image: 1, owner: 1 })
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
 })
@@ -23,10 +24,10 @@ router.get("/serviceDetails/:service_id", (req, res, next) => {
 })
 
 
-router.post("/addService", (req, res, next) => {
+router.post("/addService", isAuthenticated, (req, res, next) => {
     const { name, description, image, totalhours, date, status } = req.body
     Service
-        .create({ name, description, image, totalhours, date, status })
+        .create({ name, description, image, totalhours, date, status, owner: req.payload._id })
         .then(response => res.json(response))
         .catch(err => next(err))
 })
