@@ -5,7 +5,6 @@ const serviceSchema = new Schema(
         name: {
             type: String,
             required: [true, 'Es necesario darle un nombre al servicio.'],
-            lowercase: true,
             trim: true
         },
         description: {

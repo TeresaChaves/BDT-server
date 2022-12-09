@@ -31,10 +31,7 @@ const userSchema = new Schema(
     },
     bankAccountTime: [{
       minutes: Number,
-      //bonus para el histórico y el desglose de qué ha solicitado// service: {
-      //   type: Schema.Types.ObjectId,
-      //   ref: 'Service'
-      // },
+
     }]
   },
   {
