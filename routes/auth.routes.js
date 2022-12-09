@@ -11,30 +11,14 @@ const { isAuthenticated } = require('./../middleware/jwt.middleware')
 
 router.post('/signup', (req, res, next) => {
 
-    const { email, password, username, avatar, maxHours } = req.body
+    const { email, password, username, avatar } = req.body
 
-
-    if (password.length < 2) {
-        res.status(400).json({ message: 'Su contraseña debe tener al menos 3 caracteres' })
-        return
-    }
     User
-        .findOne({ email })
-        .then((foundUser) => {
-
-            if (foundUser) {
-                res.status(400).json({ errorMessages: ["El usuario ya existe."] })
-                return
-            }
-
-            const salt = bcrypt.genSaltSync(saltRounds)
-            const hashedPassword = bcrypt.hashSync(password, salt)
-
-            return User.create({ email, password: hashedPassword, username, avatar, maxHours })
-        })
+        .create({ email, password, username, avatar })
         .then((createdUser) => {
-            const { email, hashedPassword, username, avatar, maxHours } = createdUser
-            const user = { email, hashedPassword, username, avatar, maxHours }
+
+            const { email, hashedPassword, username, avatar } = createdUser
+            const user = { email, hashedPassword, username, avatar }
 
             res.status(201).json({ user })
         })
@@ -45,7 +29,6 @@ router.post('/signup', (req, res, next) => {
 router.post('/login', (req, res, next) => {
 
     const { email, password } = req.body;
-    console.log(email)
 
     if (email === '' || password === '') {
         res.status(400).json({ message: "Introduzca email y contraseña" });
@@ -63,9 +46,9 @@ router.post('/login', (req, res, next) => {
 
             if (bcrypt.compareSync(password, foundUser.password)) {
 
-                const { _id, email, username, avatar, maxHours } = foundUser;
+                const { _id, email, username, avatar } = foundUser;
 
-                const payload = { _id, email, username, avatar, maxHours }
+                const payload = { _id, email, username, avatar }
 
                 const authToken = jwt.sign(
                     payload,

@@ -30,7 +30,7 @@ router.post("/addService", isAuthenticated, (req, res, next) => {
         .catch(err => next(err))
 })
 
-router.put("/edit-service/:service_id", (req, res) => {
+router.put("/edit-service/:service_id", (req, res, next) => {
 
     const { service_id: id } = req.params
     const { name, description, image, totalHours } = req.body
