@@ -13,26 +13,10 @@ router.post('/signup', (req, res, next) => {
 
     const { email, password, username, avatar } = req.body
 
-
-    if (password.length < 2) {
-        res.status(400).json({ message: 'Su contraseña debe tener al menos 3 caracteres' })
-        return
-    }
     User
-        .findOne({ email })
-        .then((foundUser) => {
-
-            if (foundUser) {
-                res.status(400).json({ errorMessages: ["El usuario ya existe."] })
-                return
-            }
-
-            const salt = bcrypt.genSaltSync(saltRounds)
-            const hashedPassword = bcrypt.hashSync(password, salt)
-
-            return User.create({ email, password: hashedPassword, username, avatar })
-        })
+        .create({ email, password, username, avatar })
         .then((createdUser) => {
+
             const { email, hashedPassword, username, avatar } = createdUser
             const user = { email, hashedPassword, username, avatar }
 
@@ -45,7 +29,6 @@ router.post('/signup', (req, res, next) => {
 router.post('/login', (req, res, next) => {
 
     const { email, password } = req.body;
-    console.log(email)
 
     if (email === '' || password === '') {
         res.status(400).json({ message: "Introduzca email y contraseña" });
