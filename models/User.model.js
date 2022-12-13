@@ -29,10 +29,9 @@ const userSchema = new Schema(
       enum: ['USER', 'ADMIN'],
       default: 'USER'
     },
-    bankAccountTime: [{
-      minutes: Number,
-
-    }]
+    bankAccountTime: {
+      type: Number,
+    }
   },
   {
     timestamps: true
