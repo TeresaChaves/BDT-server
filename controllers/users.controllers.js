@@ -6,6 +6,9 @@ const User = require('./../models/User.model')
 
 const updateHours = (req, res, next) => {
     let hours = parseInt(req.body.hours, 10)
+
+    console.log('-------', req.body.hours)
+
     const user_id = req.payload._id // demandante (caponata)
     const { owner } = req.params // oferente (espinete)
     let hoursOwner //horas oferente (espinete)
@@ -23,11 +26,12 @@ const updateHours = (req, res, next) => {
             hoursLoggedUser = userData.bankAccountTime
             hoursSumOwner = hoursOwner + hours
             hoursSubLoggedUser = hoursLoggedUser - hours
+
             if (hoursLoggedUser < hours) {
                 res.status(200).json({ error: 'No tienes suficientes horas para contratar el servicio' })
 
             } else {
-                return User.findByIdAndUpdate(owner, { bankAccountTime: hoursSumOwner })
+                return User.findByIdAndUpdate(owner, { bankAccountTime: hoursSumOwner }, { new: true })
             }
         })
         .then(() => {
@@ -35,10 +39,10 @@ const updateHours = (req, res, next) => {
                 res.status(200).json({ error: 'No tienes suficientes horas para contratar el servicio' })
             } else {
 
-                return User.findByIdAndUpdate(user_id, { bankAccountTime: hoursSubLoggedUser })
+                return User.findByIdAndUpdate(user_id, { bankAccountTime: hoursSubLoggedUser }, { new: true })
             }
         })
-        .then(res.status(200))
+        .then(user => res.json(user))
         .catch(error => { next(error) })
 }
 
