@@ -15,7 +15,6 @@ const updateUser = (req, res, next) => {
 
     User.findById(owner)
 
-
         .then(ownerData => {
             hoursOwner = ownerData.bankAccountTime
             return User.findById(user_id)
@@ -24,15 +23,38 @@ const updateUser = (req, res, next) => {
             hoursLoggedUser = userData.bankAccountTime
             hoursSumOwner = hoursOwner + hours
             hoursSubLoggedUser = hoursLoggedUser - hours
-            return User.findByIdAndUpdate(owner, { bankAccountTime: hoursSumOwner })
+            if (hoursLoggedUser < hours) {
+                console.log('no tienes horas capullo')
+                res.status(200).json({ error: 'No tienes horas suficientes, Bastardo' })
+
+            } else {
+                console.log('sii trabajito!!')
+                return User.findByIdAndUpdate(owner, { bankAccountTime: hoursSumOwner })
+            }
         })
         .then(() => {
-            return User.findByIdAndUpdate(user_id, { bankAccountTime: hoursSubLoggedUser })
+            if (hoursLoggedUser < hours) {
+                console.log('no tienes horas capullo')
+                res.status(200).json({ error: 'No tienes horas suficientes, Bastardo' })
+            } else {
+
+                return User.findByIdAndUpdate(user_id, { bankAccountTime: hoursSubLoggedUser })
+            }
         })
         .then(res.status(200))
         .catch(error => { next(error) })
 }
 
+const getUserHours = (req, res, next) => {
+    const { user_id } = req.params
+
+    User
+        .findById(user_id)
+        .then(user => res.json(user.bankAccountTime))
+        .catch(error => { next(error) })
+}
+
 module.exports = {
-    updateUser
+    updateUser,
+    getUserHours
 }
