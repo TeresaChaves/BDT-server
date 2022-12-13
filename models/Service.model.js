@@ -28,7 +28,8 @@ const serviceSchema = new Schema(
         },
         status: {
             type: String,
-            enum: ['pending', 'complete'],
+            enum: ['pending', 'accepted', 'rejected'],
+            default: 'pending'
         },
 
         costumer: {
