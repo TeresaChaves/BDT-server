@@ -8,8 +8,8 @@ module.exports = app => {
     const uploadRoutes = require("./upload.routes");
     app.use("/api/upload", uploadRoutes)
 
-    const uploadUsersRoutes = require("./users.routes");
-    app.use("/api/uploadUsers", uploadUsersRoutes)
+    const uploadHoursRoutes = require("./users.routes");
+    app.use("/api/uploadHours", uploadHoursRoutes)
 
 
 }
