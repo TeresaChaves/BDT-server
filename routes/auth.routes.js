@@ -12,9 +12,11 @@ const { isAuthenticated } = require('./../middleware/jwt.middleware')
 router.post('/signup', (req, res, next) => {
 
     const { email, password, username, avatar } = req.body
+    let bankAccountTime = 0
+
 
     User
-        .create({ email, password, username, avatar })
+        .create({ email, password, username, avatar, bankAccountTime })
         .then((createdUser) => {
 
             const { email, hashedPassword, username, avatar } = createdUser
@@ -46,9 +48,9 @@ router.post('/login', (req, res, next) => {
 
             if (bcrypt.compareSync(password, foundUser.password)) {
 
-                const { _id, email, username, avatar, role, bankAccountTime } = foundUser;
+                const { _id, email, username, avatar, role } = foundUser;
 
-                const payload = { _id, email, username, avatar, role, bankAccountTime }
+                const payload = { _id, email, username, avatar, role }
 
                 const authToken = jwt.sign(
                     payload,
