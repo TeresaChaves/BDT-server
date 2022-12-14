@@ -5,8 +5,16 @@ const Service = require('./../models/Service.model')
 
 const getServices = (req, res) => {
 
+    let query
+    if (req.query.user === 'undefined') {
+        query = {}
+    } else {
+        query = {
+            'owner': req.query.user
+        }
+    }
     Service
-        .find()
+        .find(query)
         .select({ name: 1, image: 1, owner: 1 })
         .then(response => res.json(response))
         .catch(err => res.status(500).json(err))
