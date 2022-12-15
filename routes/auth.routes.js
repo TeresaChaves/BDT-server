@@ -12,7 +12,7 @@ const { isAuthenticated } = require('./../middleware/jwt.middleware')
 router.post('/signup', (req, res, next) => {
 
     const { email, password, username, avatar } = req.body
-    let bankAccountTime = 0
+    let bankAccountTime = 5
 
 
     User

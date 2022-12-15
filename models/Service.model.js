@@ -35,7 +35,12 @@ const serviceSchema = new Schema(
         costumer: {
             type: Schema.ObjectId,
             ref: 'User'
+        },
+
+        disponibility: {
+            type: String
         }
+
     }
 );
 

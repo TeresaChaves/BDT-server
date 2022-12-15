@@ -27,6 +27,7 @@ const getOneService = (req, res, next) => {
 
     Service
         .findById(service_id)
+        .populate('owner')
         .then(response => res.json(response))
         .catch(err => next(err))
 }
@@ -34,11 +35,11 @@ const getOneService = (req, res, next) => {
 
 const saveService = (req, res, next) => {
 
-    const { name, description, image, date, status } = req.body
+    const { name, description, image, date, status, disponibility } = req.body
     const { _id: owner } = req.payload
 
     Service
-        .create({ name, description, image, date, status, owner })
+        .create({ name, description, image, date, status, owner, disponibility })
         .then(response => res.json(response))
         .catch(err => next(err))
 }
@@ -46,10 +47,10 @@ const saveService = (req, res, next) => {
 const editService = (req, res, next) => {
 
     const { service_id } = req.params
-    const { name, description, image } = req.body
+    const { name, description, image, disponibility } = req.body
 
     Service
-        .findByIdAndUpdate(service_id, { name, description, image }, { new: true })
+        .findByIdAndUpdate(service_id, { name, description, image, disponibility }, { new: true })
         .then(response => res.json(response))
         .catch(error => { next(error) })
 }
