@@ -7,15 +7,12 @@ const User = require('./../models/User.model')
 const updateHours = (req, res, next) => {
     let hours = parseInt(req.body.hours, 10)
 
-    console.log('-------', req.body.hours)
-
     const user_id = req.payload._id // demandante (caponata)
     const { owner } = req.params // oferente (espinete)
     let hoursOwner //horas oferente (espinete)
     let hoursLoggedUser // horas demandante (caponata)
     let hoursSumOwner
     let hoursSubLoggedUser
-
     User.findById(owner)
 
         .then(ownerData => {
