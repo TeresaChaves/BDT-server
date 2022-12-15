@@ -72,5 +72,23 @@ router.get('/verify', isAuthenticated, (req, res) => {
     res.status(200).json(req.payload)
 })
 
+router.get('/refreshToken', isAuthenticated, (req, res, next) => {
+    User
+        .findById(req.payload._id)
+        .then(updatedUser => {
+            const { _id, email, username, avatar, role, bankAccountTime } = updatedUser;
+
+            const payload = { _id, email, username, avatar, role, bankAccountTime }
+
+            const authToken = jwt.sign(
+                payload,
+                process.env.TOKEN_SECRET,
+                { algorithm: 'HS256', expiresIn: "6h" }
+            )
+            res.json({ authToken })
+        })
+        .catch(err => next(err))
+})
+
 
 module.exports = router
