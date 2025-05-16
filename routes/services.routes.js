@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const { isAuthenticated } = require("../middleware/jwt.middleware");
-const Service = require('./../models/Service.model')
 const { getServices, getOneService, saveService, editService, deleteService } = require('../controllers/services.controllers')
 
 

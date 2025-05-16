@@ -21,6 +21,8 @@ const getServices = (req, res) => {
 
 }
 
+
+
 const getOneService = (req, res, next) => {
 
     const { service_id } = req.params
@@ -31,6 +33,8 @@ const getOneService = (req, res, next) => {
         .then(response => res.json(response))
         .catch(err => next(err))
 }
+
+
 
 
 const saveService = (req, res, next) => {
@@ -55,7 +59,6 @@ const editService = (req, res, next) => {
         .catch(error => { next(error) })
 }
 
-
 const deleteService = (req, res, next) => {
 
     const { service_id } = req.params
@@ -65,7 +68,6 @@ const deleteService = (req, res, next) => {
         .then(response => res.json(response))
         .catch(error => { next(error) })
 }
-
 
 
 module.exports = {
