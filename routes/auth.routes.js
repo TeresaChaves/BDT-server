@@ -38,10 +38,27 @@ router.post("/login", (req, res, next) => {
       }
 
       if (bcrypt.compareSync(password, foundUser.password)) {
-        const { _id, email, username, avatar, role, bankAccountTime } =
-          foundUser;
+        const {
+          _id,
+          email,
+          username,
+          avatar,
+          role,
+          bankAccountTime,
+          servicesContract,
+          servicesReceived,
+        } = foundUser;
 
-        const payload = { _id, email, username, avatar, role, bankAccountTime };
+        const payload = {
+          _id,
+          email,
+          username,
+          avatar,
+          role,
+          bankAccountTime,
+          servicesContract,
+          servicesReceived,
+        };
 
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",

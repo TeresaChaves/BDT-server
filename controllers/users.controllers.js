@@ -103,9 +103,11 @@ const getServicesContract = (req, res, next) => {
     .catch((error) => next(error));
 };
 
+//
+
 const saveServiceContract = async (req, res, next) => {
-  const { ownerId } = req.params; // El ownerId viene como un parámetro de la URL
   const { service_id, hours } = req.body; // Las horas y el servicio vienen en el cuerpo de la solicitud
+  const user_id = req.payload._id;
 
   try {
     // Verificar si las horas son válidas
@@ -115,7 +117,8 @@ const saveServiceContract = async (req, res, next) => {
         .json({ error: "La cantidad de horas debe ser mayor a cero" });
     }
 
-    const user_id = req.payload._id;
+    //validaciones de si existe el usuario y el service existe
+
     const user = await User.findById(user_id);
     if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
@@ -123,6 +126,7 @@ const saveServiceContract = async (req, res, next) => {
     if (!service)
       return res.status(404).json({ error: "Servicio no encontrado" });
 
+    //saco el onwner_id del service
     const owner_id = service.owner;
 
     // Lógica para verificar las horas del cliente y del dueño
@@ -199,6 +203,8 @@ const saveServiceContract = async (req, res, next) => {
   }
 };
 
+///get de las peticiones de los demás usuarios a los servicios que yo he subido
+
 const getServiceRequests = (req, res, next) => {
   const owner_id = req.payload._id;
 
@@ -216,7 +222,7 @@ const getServiceRequests = (req, res, next) => {
           contractId: request._id,
           client: {
             _id: request.client._id,
-            name: request.client.name, // o lo que tenga tu modelo
+            name: request.client.name,
           },
           service: request.service,
           date: request.date,

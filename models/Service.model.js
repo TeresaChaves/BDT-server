@@ -26,11 +26,6 @@ const serviceSchema = new Schema({
   serviceDate: {
     type: Date,
   },
-  //   status: {
-  //     type: String,
-  //     enum: ["pending", "accepted", "rejected"],
-  //     default: "pending",
-  //   },
 
   costumer: {
     type: Schema.ObjectId,
