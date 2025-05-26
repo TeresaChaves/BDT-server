@@ -103,6 +103,36 @@ const getServicesContract = (req, res, next) => {
     .catch((error) => next(error));
 };
 
+const getServiceRequests = (req, res, next) => {
+  const owner_id = req.payload._id;
+
+  User.findById(owner_id)
+    .populate("servicesReceived.service")
+    .populate("servicesReceived.client")
+    .then((owner) => {
+      if (!owner) {
+        return res.status(404).json({ message: "Owner no encontrado" });
+      }
+
+      const pendingRequests = owner.servicesReceived
+        // .filter((request) => request.status === "pendiente")
+        .map((request) => ({
+          contractId: request._id,
+          client: {
+            _id: request.client._id,
+            name: request.client.name,
+          },
+          service: request.service,
+          date: request.date,
+          hours: request.hours,
+          status: request.status,
+        }));
+
+      res.json(pendingRequests);
+    })
+    .catch((error) => next(error));
+};
+
 //
 
 const saveServiceContract = async (req, res, next) => {
@@ -148,7 +178,9 @@ const saveServiceContract = async (req, res, next) => {
 
     // Verificar si el servicio ya ha sido contratado por el usuario
     const alreadyContracted = user.servicesContract?.some(
-      (contract) => contract?.service?.toString() === service_id
+      (contract) =>
+        contract?.service?.toString() === service_id &&
+        contract.status !== "finalizado" // ahora permite si ya finalizó antes
     );
     if (alreadyContracted) {
       return res.status(400).json({ error: "Ya has contratado este servicio" });
@@ -203,37 +235,62 @@ const saveServiceContract = async (req, res, next) => {
   }
 };
 
-///get de las peticiones de los demás usuarios a los servicios que yo he subido
+const finishServiceContract = async (req, res, next) => {
+  const { clientId, serviceId } = req.body;
+  const ownerId = req.payload._id;
 
-const getServiceRequests = (req, res, next) => {
-  const owner_id = req.payload._id;
+  try {
+    const client = await User.findById(clientId);
+    const owner = await User.findById(ownerId);
 
-  User.findById(owner_id)
-    .populate("servicesReceived.service")
-    .populate("servicesReceived.client")
-    .then((owner) => {
-      if (!owner) {
-        return res.status(404).json({ message: "Owner no encontrado" });
-      }
+    if (!client || !owner) {
+      return res.status(404).json({ error: "Cliente u Owner no encontrado" });
+    }
 
-      const pendingRequests = owner.servicesReceived
-        // .filter((request) => request.status === "pendiente")
-        .map((request) => ({
-          contractId: request._id,
-          client: {
-            _id: request.client._id,
-            name: request.client.name,
-          },
-          service: request.service,
-          date: request.date,
-          hours: request.hours,
-          status: request.status,
-        }));
+    // Buscar contrato en el cliente
+    const clientContract = client.servicesContract.find(
+      (c) =>
+        c.service?.toString() === serviceId &&
+        c.owner?.toString() === ownerId &&
+        c.status === "aceptado"
+    );
 
-      res.json(pendingRequests);
-    })
-    .catch((error) => next(error));
+    if (!clientContract) {
+      return res
+        .status(404)
+        .json({ error: "Contrato aceptado no encontrado en cliente" });
+    }
+
+    // Buscar contrato en el owner
+    const ownerContract = owner.servicesReceived.find(
+      (c) =>
+        c.service?.toString() === serviceId &&
+        c.client?.toString() === clientId &&
+        c.status === "aceptado"
+    );
+
+    if (!ownerContract) {
+      return res
+        .status(404)
+        .json({ error: "Contrato aceptado no encontrado en owner" });
+    }
+
+    // Actualizar ambos a 'finalizado'
+    clientContract.status = "finalizado";
+    ownerContract.status = "finalizado";
+    client.markModified("servicesContract");
+    owner.markModified("servicesReceived");
+
+    await client.save();
+    await owner.save();
+
+    res.json({ message: "Contrato finalizado correctamente" });
+  } catch (error) {
+    next(error);
+  }
 };
+
+///get de las peticiones de los demás usuarios a los servicios que yo he subido
 
 const acceptServiceContract = async (req, res, next) => {
   const cleanId = (id) =>
@@ -306,4 +363,5 @@ module.exports = {
   saveServiceContract,
   getServiceRequests,
   acceptServiceContract,
+  finishServiceContract,
 };

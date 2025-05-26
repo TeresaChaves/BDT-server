@@ -40,7 +40,7 @@ const userSchema = new Schema(
 
         status: {
           type: String,
-          enum: ["pendiente", "aceptado", "rechazado"],
+          enum: ["pendiente", "aceptado", "rechazado", "finalizado"],
           default: "pendiente",
         },
       },
@@ -65,7 +65,7 @@ const userSchema = new Schema(
         },
         status: {
           type: String,
-          enum: ["pendiente", "aceptado", "rechazado"],
+          enum: ["pendiente", "aceptado", "rechazado", "finalizado"],
           default: "pendiente",
         },
       },
