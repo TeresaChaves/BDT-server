@@ -40,7 +40,13 @@ const userSchema = new Schema(
 
         status: {
           type: String,
-          enum: ["pendiente", "aceptado", "rechazado", "finalizado"],
+          enum: [
+            "pendiente",
+            "aceptado",
+            "rechazado",
+            "finalizado",
+            "valorado",
+          ],
           default: "pendiente",
         },
       },

@@ -284,6 +284,17 @@ const finishServiceContract = async (req, res, next) => {
     await client.save();
     await owner.save();
 
+    //eliminamos del owner cuando esta finalizado
+    await User.findByIdAndUpdate(ownerId, {
+      $pull: {
+        servicesReceived: {
+          service: serviceId,
+          client: clientId,
+          status: "finalizado",
+        },
+      },
+    });
+
     res.json({ message: "Contrato finalizado correctamente" });
   } catch (error) {
     next(error);
