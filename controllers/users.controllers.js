@@ -3,7 +3,6 @@ const router = require("express").Router();
 const User = require("./../models/User.model");
 const Service = require("./../models/Service.model");
 
-// const updateHours = (req, res, next) => {
 //   let hours = parseInt(req.body.hours, 10);
 //   if (isNaN(hours) || hours <= 0) {
 //     return res

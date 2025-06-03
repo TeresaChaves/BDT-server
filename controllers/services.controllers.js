@@ -13,7 +13,8 @@ const getServices = (req, res) => {
     };
   }
   Service.find(query)
-    .select({ name: 1, image: 1, owner: 1, ratings: 1 })
+    .populate("owner")
+    .select({ name: 1, image: 1, owner: 1, ratings: 1, disponibility: 1 })
     .then((services) => {
       const servicesWithRating = services.map((s) => s.toJSON());
       res.json(servicesWithRating);
@@ -37,6 +38,21 @@ const getOneService = (req, res, next) => {
 const saveService = (req, res, next) => {
   const { name, description, image, date, status, disponibility } = req.body;
   const { _id: owner } = req.payload;
+  if (!Array.isArray(disponibility)) {
+    return res.status(400).json({ error: "Disponibilidad malformada" });
+  }
+  for (const slot of disponibility) {
+    if (
+      !slot.day ||
+      !slot.time ||
+      typeof slot.day !== "string" ||
+      typeof slot.time !== "string"
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Cada disponibilidad debe tener día y hora válidos" });
+    }
+  }
 
   Service.create({
     name,

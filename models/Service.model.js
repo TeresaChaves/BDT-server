@@ -32,9 +32,24 @@ const serviceSchema = new Schema({
     ref: "User",
   },
 
-  disponibility: {
-    type: String,
-  },
+  disponibility: [
+    {
+      day: {
+        type: String,
+        enum: [
+          "Lunes",
+          "Martes",
+          "Miércoles",
+          "Jueves",
+          "Viernes",
+          "Sábado",
+          "Domingo",
+        ],
+      },
+      time: String, // formato "HH:mm"
+    },
+  ],
+
   ratings: [
     {
       client: {
